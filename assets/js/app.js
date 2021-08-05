@@ -1,31 +1,37 @@
 //OBJECT ARRAY FOR QUESTIONS, CHOICES, & ANSWERS
 var questionsObjects = [
   {
+    questionNumber: 1,
     question: "What color is the sun?",
     choices: ["A: Green", "B: Black", "C: Blue", "D: Yellow"],
-    answer: 3,
+    answer: "D: Yellow",
   },
   {
+    questionNumber: 2,
     question: "What sneaker brand has a swoosh?",
     choices: ["A: Reebok", "B: Addidas", "C: Under Armor", "D: Nike"],
-    answer: 3,
+    answer: "D: Nike",
   },
   {
+    questionNumber: 3,
     question: "What utencil has ink?",
     choices: ["A: Pencil", "B: Paper", "C: Fork", "D: Pen"],
-    answer: 3,
+    answer: "D: Pen",
   },
 ];
 
 //JQUERY VARIABLE DECLARATIONS
 var timeEl = $("#timer");
 var startBtn = $("#start-btn");
-var displayQuestion = $("#questions");
+var currentQuestion = $("#current-question");
+var currentChoices = $("#current-choices");
+var submitBtn = $("#submitBtn");
 
 //GLOBAL VARIABLE DECLARATIONS
 var secondsLeft = 60;
 var questionCount = questionsObjects.length;
-var questionNumber = 0;
+var index = 0;
+var score = 0;
 
 //COUNTDOWN TIMER
 function startTimer() {
@@ -41,7 +47,8 @@ function startTimer() {
   }, 1000);
 }
 
-function startQuiz(event) {
+//function to start the quiz, timer, remove the "start" button, display the first question (using the nextQuestion function), and check the first answer
+function startQuiz() {
   //call startTimer function
   startTimer();
   //remove start button
@@ -52,15 +59,32 @@ function startQuiz(event) {
   checkAnswer();
 }
 
-//function to display the next question and choices
+//function to display the next question and choices in a ul element
 function nextQuestion() {
-  var currentQuestion = questionsObjects[questionNumber];
-  displayQuestion.text(currentQuestion.question);
-  for (var i = 0; i < currentQuestion.choices.length; i++) {}
+  var questionIndex = questionsObjects[index];
+  currentQuestion.text(questionIndex.question);
+  for (i = 0; i < questionIndex.choices.length; i++) {
+    console.log(questionIndex, questionsObjects[i].choices, questionIndex.choices);
+    var choiceBtn = document.createElement("button");
+    choiceBtn.setAttribute("value", questionIndex.choices);
+  }
 }
 
 //function to check if answer matches the correct answer in the object. If yes, increase the score. If no, decrease the timer
-function checkAnswer() {}
+function checkAnswer(event) {
+  event.preventDefault();
+  var selection = $(event.target).text();
+  if (selection === questionsObjects[index].answer) {
+    score = score + 100;
+    nextQuestion();
+  } else {
+    secondsLeft = secondsLeft - 5000;
+    nextQuestion();
+  }
+}
+
+//function to display the score and "enter intitials" content when all questions are answered or the timer reaches 0
+function displayScore() {}
 
 //event listener when the start button is clicked
 startBtn.on("click", startQuiz);
@@ -68,3 +92,4 @@ startBtn.on("click", startQuiz);
 //event listener for when the user selects an answer
 
 //event listener when the submit score button is clicked
+submitBtn.on("click", displayScore);
