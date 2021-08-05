@@ -26,12 +26,17 @@ var startBtn = $("#start-btn");
 var currentQuestion = $("#current-question");
 var currentChoices = $("#current-choices");
 var submitBtn = $("#submitBtn");
+var questionWrapper = $(".question-wrapper");
+var submitHighscore = $(".submit-highscore");
+var playerEntry = $("#player");
 
 //GLOBAL VARIABLE DECLARATIONS
 var secondsLeft = 60;
 var questionCount = questionsObjects.length;
 var index = 0;
 var score = 0;
+
+submitHighscore.hide();
 
 //COUNTDOWN TIMER
 function startTimer() {
@@ -40,9 +45,10 @@ function startTimer() {
     secondsLeft--;
     timeEl.text(secondsLeft).prepend("Time: ");
 
-    if (secondsLeft === 0) {
+    if (secondsLeft === 0 || index === questionCount) {
       clearInterval(timerInterval);
       // call function to enter initials for final score
+      submitHighscore.show();
     }
   }, 1000);
 }
@@ -56,41 +62,57 @@ function startQuiz() {
   //call nextQuestion function when an answer is selected
   nextQuestion();
   //call checkAnswer function
-  checkAnswer();
+  // checkAnswer();
 }
 
-//function to display the next question and choices in a ul element
+//function to display the next question and choices in an li element
 function nextQuestion() {
   var questionIndex = questionsObjects[index];
   currentQuestion.text(questionIndex.question);
+  currentChoices.empty();
   for (i = 0; i < questionIndex.choices.length; i++) {
-    console.log(questionIndex, questionIndex.choices);
-    var choiceBtn = document.createElement("button");
-    choiceBtn.setAttribute("value", questionIndex[i]);
-    currentChoices.appendChild(choiceBtn);
+    var answerLi = $(`<li>`);
+    answerLi.addClass("listItemQuestion");
+    var answerBtn = $(`<button>`);
+    answerBtn.text(questionIndex.choices[i]);
+    answerLi.append(answerBtn);
+    currentChoices.append(answerLi);
   }
 }
 
-//function to check if answer matches the correct answer in the object. If yes, increase the score. If no, decrease the timer
+// function to check if answer matches the correct answer in the object. If yes, increase the score. If no, decrease the timer
 function checkAnswer(event) {
   event.preventDefault();
   var selection = $(event.target).text();
+  console.log(selection);
+  console.log(questionsObjects[index].answer);
   if (selection === questionsObjects[index].answer) {
     score = score + 100;
+    index++;
     nextQuestion();
   } else {
-    secondsLeft = secondsLeft - 5000;
+    secondsLeft = secondsLeft - 10;
+    index++;
     nextQuestion();
   }
 }
 
 //function to display the score and "enter intitials" content when all questions are answered or the timer reaches 0
-function displayScore() {}
+function displayScore(event) {
+  event.preventDefault();
+  var highscore = JSON.parse(localStorage.getItem("highscore")) || [];
+  var userInitialsInput = playerEntry.val();
+  var userObject = {};
+  userObject.initials = userInitialsInput;
+  userObject.score = score;
+  highscore.push(userObject);
+  localStorage.setItem("highscore", JSON.stringify(highscore));
+}
 
 //event listener when the start button is clicked
 startBtn.on("click", startQuiz);
 
 //event listener for when the user selects an answer
-
+questionWrapper.on("click", ".listItemQuestion", checkAnswer);
 //event listener when the submit score button is clicked
 submitBtn.on("click", displayScore);
