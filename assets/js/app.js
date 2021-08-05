@@ -29,6 +29,8 @@ var submitBtn = $("#submitBtn");
 var questionWrapper = $(".question-wrapper");
 var submitHighscore = $(".submit-highscore");
 var playerEntry = $("#player");
+var highscoreWrapper = $(".highscore-wrapper");
+var playAgain = $("#play-again");
 
 //GLOBAL VARIABLE DECLARATIONS
 var secondsLeft = 60;
@@ -37,6 +39,7 @@ var index = 0;
 var score = 0;
 
 submitHighscore.hide();
+highscoreWrapper.hide();
 
 //COUNTDOWN TIMER
 function startTimer() {
@@ -45,24 +48,24 @@ function startTimer() {
     secondsLeft--;
     timeEl.text(secondsLeft).prepend("Time: ");
 
-    if (secondsLeft === 0 || index === questionCount) {
-      clearInterval(timerInterval);
-      // call function to enter initials for final score
+    if (secondsLeft <= 0 || index === questionCount) {
+      questionWrapper.hide();
       submitHighscore.show();
+      clearInterval(timerInterval);
     }
   }, 1000);
 }
 
 //function to start the quiz, timer, remove the "start" button, display the first question (using the nextQuestion function), and check the first answer
 function startQuiz() {
+  submitHighscore.hide();
+  highscoreWrapper.hide();
   //call startTimer function
   startTimer();
   //remove start button
   startBtn.remove();
   //call nextQuestion function when an answer is selected
   nextQuestion();
-  //call checkAnswer function
-  // checkAnswer();
 }
 
 //function to display the next question and choices in an li element
@@ -91,7 +94,7 @@ function checkAnswer(event) {
     index++;
     nextQuestion();
   } else {
-    secondsLeft = secondsLeft - 10;
+    secondsLeft = secondsLeft - 30;
     index++;
     nextQuestion();
   }
@@ -100,6 +103,8 @@ function checkAnswer(event) {
 //function to display the score and "enter intitials" content when all questions are answered or the timer reaches 0
 function displayScore(event) {
   event.preventDefault();
+  submitHighscore.hide();
+  highscoreWrapper.show();
   var highscore = JSON.parse(localStorage.getItem("highscore")) || [];
   var userInitialsInput = playerEntry.val();
   var userObject = {};
@@ -111,8 +116,9 @@ function displayScore(event) {
 
 //event listener when the start button is clicked
 startBtn.on("click", startQuiz);
-
 //event listener for when the user selects an answer
 questionWrapper.on("click", ".listItemQuestion", checkAnswer);
 //event listener when the submit score button is clicked
 submitBtn.on("click", displayScore);
+//event listener when play again button is clicked
+playAgain.on("click", startQuiz);
