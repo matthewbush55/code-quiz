@@ -64,9 +64,10 @@ function nextQuestion() {
   var questionIndex = questionsObjects[index];
   currentQuestion.text(questionIndex.question);
   for (i = 0; i < questionIndex.choices.length; i++) {
-    console.log(questionIndex, questionsObjects[i].choices, questionIndex.choices);
+    console.log(questionIndex, questionIndex.choices);
     var choiceBtn = document.createElement("button");
-    choiceBtn.setAttribute("value", questionIndex.choices);
+    choiceBtn.setAttribute("value", questionIndex[i]);
+    currentChoices.appendChild(choiceBtn);
   }
 }
 
