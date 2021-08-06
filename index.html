@@ -17,28 +17,34 @@
   <header>
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Highscores</a>
+        <a class="navbar-brand" href="#">Code Quiz</a>
         <div id="timer">Time:</div>
       </div>
     </nav>
   </header>
 
   <body>
-    <main>
-      <button id="start-btn">START QUIZ</button>
+    <main class="text-center">
+      <section id="welcome-wrapper">
+        <h1 class="mt-4">Code Quiz</h1>
+        <h4 class="mx-10 m-5">Try to answer the following questions in the alotted time. Incorrect answers will result in a 15 second deduction. When the time runs out or all questions have been answered, the game is over.</h4>
+      </section>
+      <button type="button" class="btn btn-primary" id="start-btn">START</button>
       <div class="question-wrapper">
-        <h2 id="current-question"></h2>
-        <ul id="current-choices"></ul>
+        <h2 class="mt-4" id="current-question"></h2>
+        <ul class= "mx-10 m-5" id="current-choices"></ul>
       </div>
       <div class="submit-highscore">
+        <h1 class="mt-4">Game Over!</h1>
+        <br>
         <input type="text" id="player" placeholder="Enter your initials" />
         <button id="submitBtn">Submit</button>
       </div>
       <div class="highscore-wrapper">
-        <h2 id="highscores">Highscores</h2>
-        <ul id="highscore-list"></ul>
-        <button id="play-again">Play Again</button>
-      </div>
+        <h1 class="mt-4">Game Over!</h1>
+        <br>
+        <h2 class="text-primary" id="highscores">Highscores</h2>
+        <ul class="ps-0 bg-danger bg-gradient bg-opacity-25" id="highscore-list"></ul>
     </main>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
