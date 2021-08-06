@@ -12,4 +12,7 @@ This assignment demonstrates skills learned so far in the bootcamp by creating a
 
 ## Mock-Up
 
-![password-generator](./assets/images/screenshot.png)
+![code-quiz](./assets/images/screenshot1.png)
+![code-quiz](./assets/images/screenshot2.png)
+![code-quiz](./assets/images/screenshot3.png)
+![code-quiz](./assets/images/screenshot4.png)

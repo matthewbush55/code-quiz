@@ -13,7 +13,7 @@
       crossorigin="anonymous"
     />
   </head>
-
+  <!-- header containing game name and timer -->
   <header>
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
@@ -24,22 +24,28 @@
   </header>
 
   <body>
+    <!-- main container -->
     <main class="text-center">
+      <!-- container for title -->
       <section id="welcome-wrapper">
         <h1 class="mt-4">Code Quiz</h1>
         <h4 class="mx-10 m-5">Try to answer the following questions in the alotted time. Incorrect answers will result in a 15 second deduction. When the time runs out or all questions have been answered, the game is over.</h4>
       </section>
       <button type="button" class="btn btn-primary" id="start-btn">START</button>
+      <!-- container for displaying questions -->
       <div class="question-wrapper">
         <h2 class="mt-4" id="current-question"></h2>
+        <!-- unordered list to house all dynamic <li> tags from JavaScript function -->
         <ul class= "mx-10 m-5" id="current-choices"></ul>
       </div>
+      <!-- container for initials entry -->
       <div class="submit-highscore">
         <h1 class="mt-4">Game Over!</h1>
         <br>
         <input type="text" id="player" placeholder="Enter your initials" />
-        <button id="submitBtn">Submit</button>
+        <button class="btn btn-primary" id="submitBtn">Submit</button>
       </div>
+      <!-- container for displaying highscore -->
       <div class="highscore-wrapper">
         <h1 class="mt-4">Game Over!</h1>
         <br>

@@ -22,7 +22,7 @@ var questionsObjects = [
   },
 ];
 
-//JQUERY VARIABLE DECLARATIONS
+//JQUERY VARIABLE DECLARATIONS FOR REFERENCING HTML ELEMENTS
 var timeEl = $("#timer");
 var startBtn = $("#start-btn");
 var currentQuestion = $("#current-question");
@@ -38,10 +38,11 @@ var welcomeWrapper = $("#welcome-wrapper");
 //GLOBAL VARIABLE DECLARATIONS
 var secondsLeft = 60;
 var questionCount = questionsObjects.length;
+//used to iterate through the questions
 var index = 0;
 var score = 0;
 
-//global page load values for hiding elements that are not yet needed
+//global page load values for hiding elements that are not yet needed before starting the game
 submitHighscore.hide();
 highscoreWrapper.hide();
 
@@ -53,7 +54,7 @@ function startTimer() {
     timeEl.text(secondsLeft).prepend("Time: ");
 
     if (secondsLeft <= 0 || index === questionCount) {
-      timeEl.text(0);
+      timeEl.text(0).prepend("Time: ");
       questionWrapper.hide();
       submitHighscore.show();
       clearInterval(timerInterval);
@@ -63,6 +64,7 @@ function startTimer() {
 
 //function to start the quiz, timer, remove the "start" button, display the first question (using the nextQuestion function), and check the first answer
 function startQuiz() {
+  //hide elements that are not yet needed after starting the game
   submitHighscore.hide();
   highscoreWrapper.hide();
   welcomeWrapper.hide();
@@ -76,9 +78,13 @@ function startQuiz() {
 
 //function to display the next question and choices in an li element
 function nextQuestion() {
+  //assign a variable to the index of the question
   var questionIndex = questionsObjects[index];
+  //get the text of the current question using jQuery text method
   currentQuestion.text(questionIndex.question);
+  //jQuery method to remove the previous question choices
   currentChoices.empty();
+  //loop to dynamically create a list element for each of the possible answers, create and style buttons for the answers, add the possible answer text to the button element, and append the list in the HTML with the answer button
   for (i = 0; i < questionIndex.choices.length; i++) {
     var answerLi = $(`<li>`);
     answerLi.addClass("listItemQuestion");
@@ -94,14 +100,18 @@ function nextQuestion() {
 
 // function to check if answer matches the correct answer in the object. If yes, increase the score. If no, decrease the timer
 function checkAnswer(event) {
+  //prevent page refresh
   event.preventDefault();
+  //get the answer that was selected and store it in a variable to check against the correct answer
   var selection = $(event.target).text();
   if (selection === questionsObjects[index].answer) {
     score = score + 100;
+    //itereate to the next question
     index++;
     nextQuestion();
   } else {
     secondsLeft = secondsLeft - 15;
+    //iterate to the next question
     index++;
     nextQuestion();
   }
@@ -111,13 +121,19 @@ function checkAnswer(event) {
 function displayScore() {
   submitHighscore.hide();
   highscoreWrapper.show();
-  var highscore = JSON.parse(localStorage.getItem("highscore")) || [];
+  //get "highscore" object from local storage to store it in a JavaScript object variable
+  var highscore = JSON.parse(localStorage.getItem("highscore"));
+  //get the input the user put in for their initials and store it in a variable
   var userInitialsInput = playerEntry.val();
+  //create an empty object to store the users initials and score
   var userObject = {};
   userObject.initials = userInitialsInput;
   userObject.score = score;
+  //add returned JSON from local storage to the newly created object
   highscore.push(userObject);
+  //set the highscore item to a JSON string and set it back in local storage
   localStorage.setItem("highscore", JSON.stringify(highscore));
+  //create a list item element to output the user's score
   var highScoreLi = $(`<li>`);
   highScoreLi.text(userInitialsInput + " - " + score);
   highscoreList.append(highScoreLi);
